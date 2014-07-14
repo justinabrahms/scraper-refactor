@@ -5,10 +5,9 @@ from pprint import pprint
 
 _URL = "http://jornaldeangola.sapo.ao"
 
-def get_image_top_news(url):
+def get_image_top_news(source):
     """Retrieve the image of the news"""
     
-    source = urllib.urlopen(url).read()
     tree = html.document_fromstring(source)
     sec_wrapper = tree.xpath('//section[@class="top"]')
     for img in sec_wrapper:
@@ -16,10 +15,9 @@ def get_image_top_news(url):
         for src in image:
             print src
 
-def get_text_top_news(url):
+def get_text_top_news(source):
     """ Retrieve the complete news url, the tittle and the first paragraph of the news."""
     
-    source = urllib.urlopen(url).read()
     tree = html.document_fromstring(source)
     sec_wrapper = tree.xpath('//section[@class="top"]')
     for h in sec_wrapper:
@@ -40,5 +38,6 @@ def get_text_top_news(url):
     
 
 if __name__ == '__main__':
-    get_image_top_news(_URL)
-    get_text_top_news(_URL)
+    source = urllib.urlopen(_URL).read()
+    get_image_top_news(source)
+    get_text_top_news(source)
