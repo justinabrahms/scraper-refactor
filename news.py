@@ -14,9 +14,7 @@ def get_image_top_news(tree):
 def get_text_top_news(tree):
     """ Retrieve the complete news url."""
     href = tree.xpath('//section[@class="top"]/figure/a/@href')[0]
-    full_url = _URL + href
-    print "\n", full_url
-    return full_url
+    return _URL + href
 
 def get_complete_page(tree):
     """ Retrieve the title & first paragraph of the news """
@@ -61,6 +59,7 @@ def main():
         print img
 
     url = get_text_top_news(tree)
+    print "\n", url
     detail_tree = html.document_from_string(urllib.urlopen(url).read())
     title, snippets = get_complete_page(detail_tree)
 
