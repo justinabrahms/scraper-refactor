@@ -30,15 +30,12 @@ def get_text_top_news(source):
 def get_complete_page(source):
     tree_complete_page = html.document_fromstring(source)
     titles = []
-    snippets = []
 
     title = tree_complete_page.cssselect('h1.title-section2')[0].text_content()
 
     news_snippet = tree_complete_page.xpath('//*[@id="main"]/section[1]/article/div[1]/div/p//text()')
-    for p in news_snippet:
-        snippets.append(p)
 
-    return ([title], snippets)
+    return ([title], news_snippet)
 
 
 class ImageTests(unittest.TestCase):
