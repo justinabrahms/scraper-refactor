@@ -34,12 +34,10 @@ def get_complete_page(source):
 
     for title in tree_complete_page.cssselect('h1.title-section2'):
         titles.append(title.text_content())
-        print "\n", title.text_content()
 
     news_snippet = tree_complete_page.xpath('//*[@id="main"]/section[1]/article/div[1]/div/p//text()')
     for p in news_snippet:
         snippets.append(p)
-        print "\n", p
 
     return (titles, snippets)
 
@@ -71,7 +69,11 @@ def main():
     source = urllib.urlopen(_URL).read()
     for img in get_image_top_news(source):
         print img
-    get_text_top_news(source)
+    titles, snippets = get_text_top_news(source)
+    for title in titles:
+        print "\n", titles
+    for snippet in snippets:
+        print "\n", snippet
 
 if __name__ == '__main__':
     if os.getenv("TESTING"):
