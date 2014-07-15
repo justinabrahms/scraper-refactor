@@ -12,7 +12,7 @@ def get_image_top_news(tree):
     return tree.xpath('//section[@class="top"]/figure/a/img/@src')
 
 def get_text_top_news(tree):
-    """ Retrieve the complete news url, the tittle and the first paragraph of the news."""
+    """ Retrieve the complete news url."""
     
     sec_wrapper = tree.xpath('//section[@class="top"]')
     for h in sec_wrapper:
@@ -20,13 +20,10 @@ def get_text_top_news(tree):
         for href in href_path:
             full_url = _URL + href
             print "\n", full_url
-            
-            complete_page = urllib.urlopen(full_url).read()
-            tree = html.document_fromstring(complete_page)
-            get_complete_page(tree)
-
+            return full_url
 
 def get_complete_page(tree):
+    """ Retrieve the title & first paragraph of the news """
     title = tree.cssselect('h1.title-section2')[0].text_content()
     news_snippet = tree.xpath('//*[@id="main"]/section[1]/article/div[1]/div/p//text()')
 
@@ -59,7 +56,11 @@ def main():
 
     for img in get_image_top_news(tree):
         print img
-    title, snippets = get_text_top_news(tree)
+
+    url = get_text_top_news(tree)
+    detail_tree = html.document_from_string(urllib.urlopen(url).read())
+    title, snippets = get_complete_page(detail_tree)
+
     print "\n", title
     for snippet in snippets:
         print "\n", snippet
