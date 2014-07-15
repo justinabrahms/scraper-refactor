@@ -15,13 +15,11 @@ def get_text_top_news(tree):
     """ Retrieve the complete news url."""
     urls = []
     
-    sec_wrapper = tree.xpath('//section[@class="top"]')
-    for h in sec_wrapper:
-        href_path = h.xpath('//section[@class="top"]/figure/a/@href')
-        for href in href_path:
-            full_url = _URL + href
-            print "\n", full_url
-            urls.append(full_url)
+    href_path = tree.xpath('//section[@class="top"]/figure/a/@href')
+    for href in href_path:
+        full_url = _URL + href
+        print "\n", full_url
+        urls.append(full_url)
     return urls
 
 def get_complete_page(tree):
@@ -52,7 +50,6 @@ class TextTests(unittest.TestCase):
     def test_get_text_top_news(self):
         url = ['http://jornaldeangola.sapo.ao/politica/investir_nas_liderancas_da_qualidade_ao_ensino']
         self.assertEqual(url, get_text_top_news(self.index_fixture))
-
 
     def test_complete_page(self):
         retval = (u'Investir nas lideran\xe7as d\xe1 qualidade ao ensino', 
