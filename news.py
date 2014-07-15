@@ -28,7 +28,7 @@ def get_complete_page(tree):
 
 class ImageTests(unittest.TestCase):
     def setUp(self):
-        with open('./source.html') as f:
+        with open('./fixtures/source.html') as f:
             self.fixture = html.document_fromstring(f.read())
 
     def test_returns_correct_value(self):
@@ -37,10 +37,10 @@ class ImageTests(unittest.TestCase):
 
 class TextTests(unittest.TestCase):
     def setUp(self):
-        with open('./detail.html') as f:
+        with open('./fixtures/detail.html') as f:
             self.detail_fixture = html.document_fromstring(f.read())
 
-        with open('./source.html') as f:
+        with open('./fixtures/source.html') as f:
             self.index_fixture = html.document_fromstring(f.read())
 
     def test_get_text_top_news(self):
@@ -56,10 +56,10 @@ class MainTest(unittest.TestCase):
     maxDiff = None
 
     def setUp(self):
-        with codecs.open('./detail.html', encoding='utf-8') as f:
+        with codecs.open('./fixtures/detail.html', encoding='utf-8') as f:
             self.detail_fixture = f.read()
 
-        with codecs.open('./source.html', encoding='utf-8') as f:
+        with codecs.open('./fixtures/source.html', encoding='utf-8') as f:
             self.index_fixture = f.read()
 
     @patch('sys.stdout', new_callable=StringIO)
