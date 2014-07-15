@@ -24,13 +24,25 @@ def get_text_top_news(source):
             print "\n", full_url
             
             complete_page = urllib.urlopen(full_url).read()
-            tree_complete_page = html.document_fromstring(complete_page)
-            for title in tree_complete_page.cssselect('h1.title-section2'):
-                print "\n", title.text_content()
+            get_complete_page(complete_page)
 
-            news_snippet = tree_complete_page.xpath('//*[@id="main"]/section[1]/article/div[1]/div/p//text()')
-            for p in news_snippet:
-                print "\n", p
+
+def get_complete_page(source):
+    tree_complete_page = html.document_fromstring(source)
+    titles = []
+    snippets = []
+
+    for title in tree_complete_page.cssselect('h1.title-section2'):
+        titles.append(title.text_content())
+        print "\n", title.text_content()
+
+    news_snippet = tree_complete_page.xpath('//*[@id="main"]/section[1]/article/div[1]/div/p//text()')
+    for p in news_snippet:
+        snippets.append(p)
+        print "\n", p
+
+    return (titles, snippets)
+
 
 class ImageTests(unittest.TestCase):
     def setUp(self):
@@ -40,6 +52,19 @@ class ImageTests(unittest.TestCase):
     def test_returns_correct_value(self):
         url = ['http://thumbs.sapo.pt/?pic=http%3A%2F%2Fimgs.sapo.pt%2Fjornaldeangola%2Fimg%2Fthumb1%2F20140714065343pinda_simao_lgo.jpg&W=405&H=307&errorpic=http%3A%2F%2Fimgs.sapo.pt%2Fjornaldeangola2012%2Fimg%2Fdefaultja_051113.png']
         self.assertEqual(url, get_image_top_news(self.fixture))
+
+class TextTests(unittest.TestCase):
+    def setUp(self):
+        with open('./detail.html') as f:
+            self.fixture = f.read()
+
+    def test_complete_page(self):
+        retval = ([u'Investir nas lideran\xe7as d\xe1 qualidade ao ensino'], 
+                  [u'O ministro da Educa\xe7\xe3o esteve\xa0 no Lubango, Caluquembe e Caconda onde se  inteirou do funcionamento do sector. Pinda Sim\xe3o disse em entrevista ao', ' Jornal de Angola', u' que foi estabelecido um di\xe1logo com os directores de escolas e com o  Conselho de Ausculta\xe7\xe3o e Concerta\xe7\xe3o Social em busca de solu\xe7\xf5es para  as reivindica\xe7\xf5es apresentadas pelos professores.'])
+        self.assertEqual(retval, get_complete_page(self.fixture))
+
+
+
 
     
 def main():
