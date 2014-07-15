@@ -32,10 +32,9 @@ def get_complete_page(source):
     titles = []
 
     title = tree_complete_page.cssselect('h1.title-section2')[0].text_content()
-
     news_snippet = tree_complete_page.xpath('//*[@id="main"]/section[1]/article/div[1]/div/p//text()')
 
-    return ([title], news_snippet)
+    return (title, news_snippet)
 
 
 class ImageTests(unittest.TestCase):
@@ -53,7 +52,7 @@ class TextTests(unittest.TestCase):
             self.fixture = f.read()
 
     def test_complete_page(self):
-        retval = ([u'Investir nas lideran\xe7as d\xe1 qualidade ao ensino'], 
+        retval = (u'Investir nas lideran\xe7as d\xe1 qualidade ao ensino', 
                   [u'O ministro da Educa\xe7\xe3o esteve\xa0 no Lubango, Caluquembe e Caconda onde se  inteirou do funcionamento do sector. Pinda Sim\xe3o disse em entrevista ao', ' Jornal de Angola', u' que foi estabelecido um di\xe1logo com os directores de escolas e com o  Conselho de Ausculta\xe7\xe3o e Concerta\xe7\xe3o Social em busca de solu\xe7\xf5es para  as reivindica\xe7\xf5es apresentadas pelos professores.'])
         self.assertEqual(retval, get_complete_page(self.fixture))
 
@@ -65,9 +64,8 @@ def main():
     source = urllib.urlopen(_URL).read()
     for img in get_image_top_news(source):
         print img
-    titles, snippets = get_text_top_news(source)
-    for title in titles:
-        print "\n", titles
+    title, snippets = get_text_top_news(source)
+    print "\n", title
     for snippet in snippets:
         print "\n", snippet
 
