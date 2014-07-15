@@ -1,5 +1,6 @@
 import urllib
 import os
+import unittest
 from lxml import html
 from lxml import etree
 from pprint import pprint
@@ -9,12 +10,15 @@ _URL = "http://jornaldeangola.sapo.ao"
 def get_image_top_news(source):
     """Retrieve the image of the news"""
     
+    srcs = []
     tree = html.document_fromstring(source)
     sec_wrapper = tree.xpath('//section[@class="top"]')
     for img in sec_wrapper:
         image = img.xpath('//section[@class="top"]/figure/a/img/@src')
         for src in image:
             print src
+            srcs.append(src)
+    return srcs
 
 def get_text_top_news(source):
     """ Retrieve the complete news url, the tittle and the first paragraph of the news."""
@@ -36,6 +40,14 @@ def get_text_top_news(source):
             for p in news_snippet:
                 print "\n", p
 
+class ImageTests(unittest.TestCase):
+    def setUp(self):
+        with open('./source.html') as f:
+            self.fixture = f.read()
+
+    def test_returns_correct_value(self):
+        url = ['http://thumbs.sapo.pt/?pic=http%3A%2F%2Fimgs.sapo.pt%2Fjornaldeangola%2Fimg%2Fthumb1%2F20140714065343pinda_simao_lgo.jpg&W=405&H=307&errorpic=http%3A%2F%2Fimgs.sapo.pt%2Fjornaldeangola2012%2Fimg%2Fdefaultja_051113.png']
+        self.assertEqual(url, get_image_top_news(self.fixture))
     
 def main():
     source = urllib.urlopen(_URL).read()
@@ -44,7 +56,6 @@ def main():
 
 if __name__ == '__main__':
     if os.getenv("TESTING"):
-        import unittest
         unittest.main()
     else:
         main()
