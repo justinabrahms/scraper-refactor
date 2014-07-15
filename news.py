@@ -12,11 +12,9 @@ def get_image_top_news(source):
     
     srcs = []
     tree = html.document_fromstring(source)
-    sec_wrapper = tree.xpath('//section[@class="top"]')
-    for img in sec_wrapper:
-        image = img.xpath('//section[@class="top"]/figure/a/img/@src')
-        for src in image:
-            srcs.append(src)
+    image = tree.xpath('//section[@class="top"]/figure/a/img/@src')
+    for src in image:
+        srcs.append(src)
     return srcs
 
 def get_text_top_news(source):
