@@ -16,7 +16,6 @@ def get_image_top_news(source):
     for img in sec_wrapper:
         image = img.xpath('//section[@class="top"]/figure/a/img/@src')
         for src in image:
-            print src
             srcs.append(src)
     return srcs
 
@@ -48,10 +47,12 @@ class ImageTests(unittest.TestCase):
     def test_returns_correct_value(self):
         url = ['http://thumbs.sapo.pt/?pic=http%3A%2F%2Fimgs.sapo.pt%2Fjornaldeangola%2Fimg%2Fthumb1%2F20140714065343pinda_simao_lgo.jpg&W=405&H=307&errorpic=http%3A%2F%2Fimgs.sapo.pt%2Fjornaldeangola2012%2Fimg%2Fdefaultja_051113.png']
         self.assertEqual(url, get_image_top_news(self.fixture))
+
     
 def main():
     source = urllib.urlopen(_URL).read()
-    get_image_top_news(source)
+    for img in get_image_top_news(source):
+        print img
     get_text_top_news(source)
 
 if __name__ == '__main__':
