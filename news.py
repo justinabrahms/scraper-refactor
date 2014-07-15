@@ -13,6 +13,7 @@ def get_image_top_news(tree):
 
 def get_text_top_news(tree):
     """ Retrieve the complete news url."""
+    urls = []
     
     sec_wrapper = tree.xpath('//section[@class="top"]')
     for h in sec_wrapper:
@@ -20,7 +21,8 @@ def get_text_top_news(tree):
         for href in href_path:
             full_url = _URL + href
             print "\n", full_url
-            return full_url
+            urls.append(full_url)
+    return urls
 
 def get_complete_page(tree):
     """ Retrieve the title & first paragraph of the news """
@@ -42,12 +44,20 @@ class ImageTests(unittest.TestCase):
 class TextTests(unittest.TestCase):
     def setUp(self):
         with open('./detail.html') as f:
-            self.fixture = html.document_fromstring(f.read())
+            self.detail_fixture = html.document_fromstring(f.read())
+
+        with open('./source.html') as f:
+            self.index_fixture = html.document_fromstring(f.read())
+
+    def test_get_text_top_news(self):
+        url = ['http://jornaldeangola.sapo.ao/politica/investir_nas_liderancas_da_qualidade_ao_ensino']
+        self.assertEqual(url, get_text_top_news(self.index_fixture))
+
 
     def test_complete_page(self):
         retval = (u'Investir nas lideran\xe7as d\xe1 qualidade ao ensino', 
                   [u'O ministro da Educa\xe7\xe3o esteve\xa0 no Lubango, Caluquembe e Caconda onde se  inteirou do funcionamento do sector. Pinda Sim\xe3o disse em entrevista ao', ' Jornal de Angola', u' que foi estabelecido um di\xe1logo com os directores de escolas e com o  Conselho de Ausculta\xe7\xe3o e Concerta\xe7\xe3o Social em busca de solu\xe7\xf5es para  as reivindica\xe7\xf5es apresentadas pelos professores.'])
-        self.assertEqual(retval, get_complete_page(self.fixture))
+        self.assertEqual(retval, get_complete_page(self.detail_fixture))
 
     
 def main():
