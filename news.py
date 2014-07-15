@@ -13,13 +13,10 @@ def get_image_top_news(tree):
 
 def get_text_top_news(tree):
     """ Retrieve the complete news url."""
-    urls = []
-    
     href = tree.xpath('//section[@class="top"]/figure/a/@href')[0]
     full_url = _URL + href
     print "\n", full_url
-    urls.append(full_url)
-    return urls
+    return full_url
 
 def get_complete_page(tree):
     """ Retrieve the title & first paragraph of the news """
@@ -47,7 +44,7 @@ class TextTests(unittest.TestCase):
             self.index_fixture = html.document_fromstring(f.read())
 
     def test_get_text_top_news(self):
-        url = ['http://jornaldeangola.sapo.ao/politica/investir_nas_liderancas_da_qualidade_ao_ensino']
+        url = 'http://jornaldeangola.sapo.ao/politica/investir_nas_liderancas_da_qualidade_ao_ensino'
         self.assertEqual(url, get_text_top_news(self.index_fixture))
 
     def test_complete_page(self):
