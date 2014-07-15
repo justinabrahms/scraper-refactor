@@ -1,9 +1,11 @@
-import urllib
+# -*- coding: utf-8 -*-
+import codecs
 import os
 import unittest
+import urllib
 from lxml import html
-from lxml import etree
-from pprint import pprint
+from mock import patch, Mock
+from StringIO import StringIO
 
 _URL = "http://jornaldeangola.sapo.ao"
 
@@ -49,6 +51,45 @@ class TextTests(unittest.TestCase):
         retval = (u'Investir nas lideran\xe7as d\xe1 qualidade ao ensino', 
                   [u'O ministro da Educa\xe7\xe3o esteve\xa0 no Lubango, Caluquembe e Caconda onde se  inteirou do funcionamento do sector. Pinda Sim\xe3o disse em entrevista ao', ' Jornal de Angola', u' que foi estabelecido um di\xe1logo com os directores de escolas e com o  Conselho de Ausculta\xe7\xe3o e Concerta\xe7\xe3o Social em busca de solu\xe7\xf5es para  as reivindica\xe7\xf5es apresentadas pelos professores.'])
         self.assertEqual(retval, get_complete_page(self.detail_fixture))
+
+class MainTest(unittest.TestCase):
+    maxDiff = None
+
+    def setUp(self):
+        with codecs.open('./detail.html', encoding='utf-8') as f:
+            self.detail_fixture = f.read()
+
+        with codecs.open('./source.html', encoding='utf-8') as f:
+            self.index_fixture = f.read()
+
+    @patch('sys.stdout', new_callable=StringIO)
+    @patch('__main__.urllib')
+    def test_sanity(self, urllib, stdout):
+        responses = [self.index_fixture, self.detail_fixture]
+        def side_effect():
+            return responses.pop(0)
+
+        urllib.urlopen.return_value.read = Mock(side_effect=side_effect)
+
+        main()
+
+        expected = u"""
+http://thumbs.sapo.pt/?pic=http%3A%2F%2Fimgs.sapo.pt%2Fjornaldeangola%2Fimg%2Fthumb1%2F20140714065343pinda_simao_lgo.jpg&W=405&H=307&errorpic=http%3A%2F%2Fimgs.sapo.pt%2Fjornaldeangola2012%2Fimg%2Fdefaultja_051113.png
+
+http://jornaldeangola.sapo.ao/politica/investir_nas_liderancas_da_qualidade_ao_ensino
+
+Investir nas lideran\xe7as d\xe1 qualidade ao ensino
+
+O ministro da Educa\xe7\xe3o esteve\xa0 no Lubango, Caluquembe e Caconda onde se  inteirou do funcionamento do sector. Pinda Sim\xe3o disse em entrevista ao
+
+ Jornal de Angola
+
+ que foi estabelecido um di\xe1logo com os directores de escolas e com o  Conselho de Ausculta\xe7\xe3o e Concerta\xe7\xe3o Social em busca de solu\xe7\xf5es para  as reivindica\xe7\xf5es apresentadas pelos professores.
+"""
+
+        s = stdout.getvalue().strip()
+        self.assertEqual(expected.strip(), s)
+
 
     
 def main():
