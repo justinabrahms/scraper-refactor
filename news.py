@@ -1,4 +1,5 @@
 import urllib
+import os
 from lxml import html
 from lxml import etree
 from pprint import pprint
@@ -36,8 +37,15 @@ def get_text_top_news(source):
                 print "\n", p
 
     
-
-if __name__ == '__main__':
+def main():
     source = urllib.urlopen(_URL).read()
     get_image_top_news(source)
     get_text_top_news(source)
+
+if __name__ == '__main__':
+    if os.getenv("TESTING"):
+        import unittest
+        unittest.main()
+    else:
+        main()
+
