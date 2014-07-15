@@ -15,11 +15,10 @@ def get_text_top_news(tree):
     """ Retrieve the complete news url."""
     urls = []
     
-    href_path = tree.xpath('//section[@class="top"]/figure/a/@href')
-    for href in href_path:
-        full_url = _URL + href
-        print "\n", full_url
-        urls.append(full_url)
+    href = tree.xpath('//section[@class="top"]/figure/a/@href')[0]
+    full_url = _URL + href
+    print "\n", full_url
+    urls.append(full_url)
     return urls
 
 def get_complete_page(tree):
