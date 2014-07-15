@@ -9,13 +9,8 @@ _URL = "http://jornaldeangola.sapo.ao"
 
 def get_image_top_news(source):
     """Retrieve the image of the news"""
-    
-    srcs = []
     tree = html.document_fromstring(source)
-    image = tree.xpath('//section[@class="top"]/figure/a/img/@src')
-    for src in image:
-        srcs.append(src)
-    return srcs
+    return tree.xpath('//section[@class="top"]/figure/a/img/@src')
 
 def get_text_top_news(source):
     """ Retrieve the complete news url, the tittle and the first paragraph of the news."""
