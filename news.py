@@ -32,14 +32,13 @@ def get_complete_page(source):
     titles = []
     snippets = []
 
-    for title in tree_complete_page.cssselect('h1.title-section2'):
-        titles.append(title.text_content())
+    title = tree_complete_page.cssselect('h1.title-section2')[0].text_content()
 
     news_snippet = tree_complete_page.xpath('//*[@id="main"]/section[1]/article/div[1]/div/p//text()')
     for p in news_snippet:
         snippets.append(p)
 
-    return (titles, snippets)
+    return ([title], snippets)
 
 
 class ImageTests(unittest.TestCase):
