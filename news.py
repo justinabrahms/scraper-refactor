@@ -60,7 +60,7 @@ def main():
 
     url = get_text_top_news(tree)
     print "\n", url
-    detail_tree = html.document_from_string(urllib.urlopen(url).read())
+    detail_tree = html.document_fromstring(urllib.urlopen(url).read())
     title, snippets = get_complete_page(detail_tree)
 
     print "\n", title
