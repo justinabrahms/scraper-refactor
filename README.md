@@ -1,6 +1,6 @@
 # Refactoring: Web Scraper
 
-I was asked by someone to code review a web scraper. I performed the
+I was asked by [@bastasgtnh](https://github.com/bastasgtnh) to code review a web scraper. I performed the
 refactoring as a series of git commits with (hopefully) helpful commit
 messages.
 
